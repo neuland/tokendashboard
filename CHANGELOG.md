@@ -8,6 +8,31 @@ Backend and frontend share one version and are released together; each release i
 `vX.Y.Z` tag on `main`. Decisions referenced below live in
 [`backend/docs/decisions.md`](backend/docs/decisions.md) unless noted otherwise.
 
+## [1.0.1] - 2026-11-18
+
+A security release. Both images are rebuilt on their current base images; only the
+backend changes in behaviour.
+
+### Backend
+
+#### Security
+
+- **Mitigation for Java4Shell (CVE-2026-114938)**, a remote code execution flaw in
+  the JVM's AVX-512 Base64 decoder, see the
+  [OpenJDK advisory](https://openjdk.org/groups/vulnerability/advisories/2026-11-17).
+  The backend image now starts the JVM with `-XX:-UseBASE64Intrinsics`, which
+  turns that decoder off. Only x86-64 hosts whose CPU supports AVX-512 VBMI are
+  affected (Intel Xeon from Ice Lake, AMD from Zen 4); arm64 is not.
+- **The image still ships Temurin 25.0.5**, because no Temurin build with the fix
+  (25.0.5.1) has been published yet. A later release moves to it.
+- **Staying on 1.0.0, or replacing the image's command?** Set
+  `JAVA_TOOL_OPTIONS=-XX:-UseBASE64Intrinsics` for the backend container instead.
+
+### Repository and deployment
+
+- **Gradle wrapper 9.9.1**, which officially supports running on Java 25, with the
+  distribution's checksum pinned.
+
 ## [1.0.0] - 2026-11-06
 
 The first release. Earlier states of the two former repositories were development
