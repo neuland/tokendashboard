@@ -29,4 +29,8 @@ USER appuser
 
 EXPOSE 8080
 
-CMD ["java", "-cp", "app.jar", "io.ktor.server.netty.EngineMain"]
+# -XX:-UseBASE64Intrinsics mitigates Java4Shell (CVE-2026-114938) by disabling the vulnerable
+# AVX-512 Base64 intrinsic. It sits in the command rather than in JAVA_TOOL_OPTIONS so that
+# setting JAVA_TOOL_OPTIONS for other flags does not silently drop it. Remove once the base
+# image ships a fixed JDK (Temurin 25.0.5.1 or later).
+CMD ["java", "-XX:-UseBASE64Intrinsics", "-cp", "app.jar", "io.ktor.server.netty.EngineMain"]
