@@ -8,6 +8,22 @@ Backend and frontend share one version and are released together; each release i
 `vX.Y.Z` tag on `main`. Decisions referenced below live in
 [`backend/docs/decisions.md`](backend/docs/decisions.md) unless noted otherwise.
 
+## [1.0.2] - 2026-11-21
+
+A security release. Both images are rebuilt on their current base images; only the
+backend changes in behaviour.
+
+### Backend
+
+#### Security
+
+- **The image now ships Temurin 25.0.5.1, which fixes Java4Shell
+  (CVE-2026-114938)**, see the
+  [OpenJDK advisory](https://openjdk.org/groups/vulnerability/advisories/2026-11-17).
+- **The JVM no longer starts with `-XX:-UseBASE64Intrinsics`.** The mitigation from
+  1.0.1 is not needed with the fixed JDK. If you set
+  `JAVA_TOOL_OPTIONS=-XX:-UseBASE64Intrinsics` for 1.0.0, remove it after upgrading.
+
 ## [1.0.1] - 2026-11-18
 
 A security release. Both images are rebuilt on their current base images; only the

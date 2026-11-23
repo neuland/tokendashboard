@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.neuland"
-version = "1.0.1"
+version = "1.0.2"
 
 application {
     mainClass.set("de.neuland.tokendashboard.ApplicationKt")
